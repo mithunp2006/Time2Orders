@@ -1,5 +1,9 @@
 import os
 import mysql.connector
+#load environment variables from .env file
+from dotenv import load_dotenv
+load_dotenv()
+
 #function to insert the error message into the database
 def log_error_to_db(error_message, url_path=None, user_agent=None):
     try:
