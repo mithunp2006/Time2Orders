@@ -10,6 +10,9 @@ import db
 from datetime import datetime
 import random
 from db import log_error_to_db
+#load environment variables from .env file
+from dotenv import load_dotenv
+load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = 'your-secret-key'  # Replace with a secure random key in production
