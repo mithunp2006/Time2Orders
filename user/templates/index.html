@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -689,6 +690,7 @@
       height: 100%;
       background: rgba(0, 0, 0, 0.7);
       backdrop-filter: blur(10px);
+      overflow: auto;
     }
 
     .modal-content {
@@ -905,7 +907,6 @@
 
     @keyframes spin {
       to { transform: rotate(360deg); }
- HD
     }
 
     /* Responsive Design */
@@ -914,7 +915,6 @@
         grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
         gap: 2rem;
         align-items: stretch;
-
       }
     }
 
@@ -963,13 +963,9 @@
       }
 
       .shops-grid {
-  align-items: stretch;
-}
-      .shops-grid {
         grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
         gap: 1.5rem;
       }
-
 
       .modal-content {
         margin: 5% auto;
@@ -1048,29 +1044,29 @@
       transform: translateY(0);
     }
     .shops-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 2rem;
-}
-.shop-card {
-    transition: transform 0.2s;
-}
-.shop-card:hover {
-    transform: translateY(-5px);
-}
-.fade-in-up {
-    animation: fadeInUp 0.5s ease-out;
-}
-@keyframes fadeInUp {
-    from {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+    .shop-card {
+      transition: transform 0.2s;
+    }
+    .shop-card:hover {
+      transform: translateY(-5px);
+    }
+    .fade-in-up {
+      animation: fadeInUp 0.5s ease-out;
+    }
+    @keyframes fadeInUp {
+      from {
         opacity: 0;
         transform: translateY(20px);
-    }
-    to {
+      }
+      to {
         opacity: 1;
         transform: translateY(0);
+      }
     }
-}
   </style>
 </head>
 <body>
@@ -1095,27 +1091,27 @@
           <i class="fas fa-chevron-down" style="font-size: 0.75rem; margin-left: 0.25rem;"></i>
         </div>
         <div class="pincode-dropdown" id="pincodeDropdown">
-<form method="POST" action="/search" class="dropdown-form">
-  <div class="form-group">
-    <label for="pincode" class="sr-only">Pincode</label>
-    <input type="text" id="pincodeSearchInput" name="pincode" placeholder="Enter Pincode" class="form-input" required />
-    <button type="submit" class="btn btn-primary">
-      <i class="fas fa-search"></i>
-      Search by Pincode
-    </button>
-  </div>
-</form>
-<form method="GET" action="/searchshop" class="dropdown-form">
-  <div class="form-group">
-    <label for="shopNameInput" class="sr-only">Shop Name</label>
-    <input type="text" name="shop_name" id="shopNameInput" placeholder="Enter Shop Name" class="form-input" required />
-    <input type="text" name="pincode" placeholder="Enter Postal Code (optional)" class="form-input" />
-    <button type="submit" class="btn btn-secondary">
-      <i class="fas fa-store"></i>
-      Search Shop
-    </button>
-  </div>
-</form>
+          <form method="POST" action="/search" class="dropdown-form">
+            <div class="form-group">
+              <label for="pincode" class="sr-only">Pincode</label>
+              <input type="text" id="pincodeSearchInput" name="pincode" placeholder="Enter Pincode" class="form-input" required />
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-search"></i>
+                Search by Pincode
+              </button>
+            </div>
+          </form>
+          <form method="GET" action="/searchshop" class="dropdown-form">
+            <div class="form-group">
+              <label for="shopNameInput" class="sr-only">Shop Name</label>
+              <input type="text" name="shop_name" id="shopNameInput" placeholder="Enter Shop Name" class="form-input" required />
+              <input type="text" name="pincode" placeholder="Enter Postal Code (optional)" class="form-input" />
+              <button type="submit" class="btn btn-secondary">
+                <i class="fas fa-store"></i>
+                Search Shop
+              </button>
+            </div>
+          </form>
         </div>
         {% if is_logged_in %}
           <div class="profile-menu">
@@ -1178,53 +1174,53 @@
     </div>
   </section>
 
-<section class="shops">
+  <section class="shops">
     <div class="container">
-        <h2>Local Shops</h2>
-        <p>Popular Shops Near You</p>
-        <p>
-            {% if pincode %}
-                Discover amazing local shops in {{ pincode }} and start your convenient shopping journey
-            {% else %}
-                Discover amazing local shops in your area and start your convenient shopping journey
-            {% endif %}
-        </p>
+      <h2>Local Shops</h2>
+      <p>Popular Shops Near You</p>
+      <p>
+        {% if pincode %}
+          Discover amazing local shops in {{ pincode }} and start your convenient shopping journey
+        {% else %}
+          Discover amazing local shops in your area and start your convenient shopping journey
+        {% endif %}
+      </p>
 
-        <div class="shops-grid">
-            {% if shops %}
-                {% for shop in shops %}
-                    <a href="/shop/{{ shop.id }}" class="shop-card-link" title="View details for {{ shop.shop_name }}">
-                        <div class="shop-card">
-                            {% set image_url = 
-                                'https://images2.alphacoders.com/862/862730.jpg' if shop.category == 'meat' else
-                                'https://i.pinimg.com/originals/da/ed/b3/daedb3e27d0411845df77e13675a0970.jpg' if shop.category == 'RO Shop' else
-                                'https://images2.alphacoders.com/862/862730.jpg' if shop.category == 'hostel' else
-                                'https://plus.unsplash.com/premium_photo-1664202526559-e21e9c0fb46a?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8ZmFzaGlvbnxlbnwwfHwwfHx8MA%3D%3D' if shop.category == 'Fashion' else
-                                'https://i.imgur.com/5xyoeGk.jpg' 
-                            %}
-                            <div class="shop-image">
-                                <img src="{{ image_url }}" alt="{{ shop.shop_name }}">
-                                <span class="shop-status">{{ shop.shop_status }}</span>
-                            </div>
-                            <div class="shop-details">
-                                <h3>{{ shop.shop_name }}</h3>
-                                <p>{{ shop.shop_owner_name }}</p>
-                                <p>{{ shop.shop_address }}</p>
-                                <p>{{ shop.category }}</p>
-                                <a href="/shop/{{ shop.id }}/map" class="map-link">View Map</a>
-                            </div>
-                        </div>
-                    </a>
-                {% endfor %}
-            {% else %}
-                <div class="no-shops">
-                    <p>No shops found in this area</p>
-                    <p>Try searching with a different postal code or explore other locations.</p>
+      <div class="shops-grid">
+        {% if shops %}
+          {% for shop in shops %}
+            <a href="/shop/{{ shop.id }}" class="shop-card-link" title="View details for {{ shop.shop_name }}">
+              <div class="shop-card">
+                {% set image_url = 
+                  'https://images2.alphacoders.com/862/862730.jpg' if shop.category == 'meat' else
+                  'https://i.pinimg.com/originals/da/ed/b3/daedb3e27d0411845df77e13675a0970.jpg' if shop.category == 'RO Shop' else
+                  'https://images2.alphacoders.com/862/862730.jpg' if shop.category == 'hostel' else
+                  'https://plus.unsplash.com/premium_photo-1664202526559-e21e9c0fb46a?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8ZmFzaGlvbnxlbnwwfHwwfHx8MA%3D%3D' if shop.category == 'Fashion' else
+                  'https://i.imgur.com/5xyoeGk.jpg' 
+                %}
+                <div class="shop-image">
+                  <img src="{{ image_url }}" alt="{{ shop.shop_name }}">
+                  <span class="shop-status">{{ shop.shop_status }}</span>
                 </div>
-            {% endif %}
-        </div>
+                <div class="shop-details">
+                  <h3>{{ shop.shop_name }}</h3>
+                  <p>{{ shop.shop_owner_name }}</p>
+                  <p>{{ shop.shop_address }}</p>
+                  <p>{{ shop.category }}</p>
+                  <a href="/shop/{{ shop.id }}/map" class="map-link">View Map</a>
+                </div>
+              </div>
+            </a>
+          {% endfor %}
+        {% else %}
+          <div class="no-shops">
+            <p>No shops found in this area</p>
+            <p>Try searching with a different postal code or explore other locations.</p>
+          </div>
+        {% endif %}
+      </div>
     </div>
-</section>
+  </section>
 
   <!-- Flash Messages Popup -->
   {% with messages = get_flashed_messages(with_categories=true) %}
@@ -1260,7 +1256,7 @@
           </div>
         </div>
         
-        <div id="otpSection" class="hidden">
+        <div id="otpSection">
           <div class="verification-row">
             <input type="text" name="otp" id="otpInput" placeholder="Enter 6-digit OTP" class="form-input" maxlength="6" />
             <button type="button" id="verifyOTPBtn" class="btn btn-primary" onclick="verifyOTP()">
@@ -1363,7 +1359,7 @@
       </div>
       {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
-          <div class="popup {{ 'error' if messages[0][0] == 'error' else 'success' }}" id="verifyOtpFlashPopup" style="display:block; position: relative; top: 0; broken link reference fragment identifier: 0; transform: none; margin-bottom: 1rem;">
+          <div class="popup {{ 'error' if messages[0][0] == 'error' else 'success' }}" id="verifyOtpFlashPopup" style="display:block; position: relative; top: 0; left: 0; transform: none; margin-bottom: 1rem;">
             {{ messages[0][1] }}
             <span class="close-popup" onclick="document.getElementById('verifyOtpFlashPopup').style.display='none'">×</span>
           </div>
@@ -1408,43 +1404,44 @@
       </form>
     </div>
   </div>
-<!-- Footer -->
-<footer style="background: var(--bg-dark); color: var(--text-white); padding: 3rem 2rem 2rem; margin-top: 4rem;">
-  <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2rem;">
-    <div style="flex: 1; min-width: 250px;">
-      <h3 style="font-family: 'Poppins', sans-serif; font-size: 1.5rem; font-weight: 700; color: #4facfe;">Time2Order</h3>
-      <p style="margin-top: 1rem; line-height: 1.7; color: var(--text-light);">
-        Your smart gateway to local shopping. Pre-order essentials and support your nearby vendors.
-      </p>
-    </div>
 
-    <div style="flex: 1; min-width: 200px;">
-      <h4 style="font-weight: 600; margin-bottom: 1rem;">Quick Links</h4>
-      <ul style="list-style: none; padding: 0; line-height: 2;">
-        <li><a href="/about" style="color: #cbd5e0; text-decoration: none;">About Us</a></li>
-        <li><a href="/terms" style="color: #cbd5e0; text-decoration: none;">Terms & Conditions</a></li>
-        <li><a href="/privacy_policy" style="color: #cbd5e0; text-decoration: none;">Privacy Policy</a></li>
-        <li><a href="/contact" style="color: #cbd5e0; text-decoration: none;">Contact</a></li>
-      </ul>
-    </div>
+  <!-- Footer -->
+  <footer style="background: var(--bg-dark); color: var(--text-white); padding: 3rem 2rem 2rem; margin-top: 4rem;">
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2rem;">
+      <div style="flex: 1; min-width: 250px;">
+        <h3 style="font-family: 'Poppins', sans-serif; font-size: 1.5rem; font-weight: 700; color: #4facfe;">Time2Order</h3>
+        <p style="margin-top: 1rem; line-height: 1.7; color: var(--text-light);">
+          Your smart gateway to local shopping. Pre-order essentials and support your nearby vendors.
+        </p>
+      </div>
 
-    <div style="flex: 1; min-width: 200px;">
-      <h4 style="font-weight: 600; margin-bottom: 1rem;">Connect With Us</h4>
-      <div style="display: flex; gap: 1rem; font-size: 1.25rem;">
-        <a href="#" style="color: #38bdf8;"><i class="fab fa-facebook-f"></i></a>
-        <a href="#" style="color: #60a5fa;"><i class="fab fa-twitter"></i></a>
-        <a href="#" style="color: #f87171;"><i class="fab fa-instagram"></i></a>
-        <a href="#" style="color: #34d399;"><i class="fab fa-whatsapp"></i></a>
+      <div style="flex: 1; min-width: 200px;">
+        <h4 style="font-weight: 600; margin-bottom: 1rem;">Quick Links</h4>
+        <ul style="list-style: none; padding: 0; line-height: 2;">
+          <li><a href="/about" style="color: #cbd5e0; text-decoration: none;">About Us</a></li>
+          <li><a href="/terms" style="color: #cbd5e0; text-decoration: none;">Terms & Conditions</a></li>
+          <li><a href="/privacy_policy" style="color: #cbd5e0; text-decoration: none;">Privacy Policy</a></li>
+          <li><a href="/contact" style="color: #cbd5e0; text-decoration: none;">Contact</a></li>
+        </ul>
+      </div>
+
+      <div style="flex: 1; min-width: 200px;">
+        <h4 style="font-weight: 600; margin-bottom: 1rem;">Connect With Us</h4>
+        <div style="display: flex; gap: 1rem; font-size: 1.25rem;">
+          <a href="#" style="color: #38bdf8;"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" style="color: #60a5fa;"><i class="fab fa-twitter"></i></a>
+          <a href="#" style="color: #f87171;"><i class="fab fa-instagram"></i></a>
+          <a href="#" style="color: #34d399;"><i class="fab fa-whatsapp"></i></a>
+        </div>
       </div>
     </div>
-  </div>
 
-  <hr style="margin: 2rem 0; border-color: rgba(255,255,255,0.1);" />
+    <hr style="margin: 2rem 0; border-color: rgba(255,255,255,0.1);" />
 
-  <p style="text-align: center; color: #a0aec0; font-size: 0.9rem;">
-    &copy; {{ current_year or 2025 }} Time2Order. All rights reserved.
-  </p>
-</footer>
+    <p style="text-align: center; color: #a0aec0; font-size: 0.9rem;">
+      © {{ current_year or 2025 }} Time2Order. All rights reserved.
+    </p>
+  </footer>
 
   <script>
     // Global variables
@@ -1648,42 +1645,57 @@
       return false;
     }
 
-    async function sendOTP() {
-      const emailInput = document.getElementById('emailInput');
-      const email = emailInput.value.trim();
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+   async function sendOTP() {
+  const emailInput = document.getElementById('emailInput');
+  const email = emailInput.value.trim();
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-      if (!email || !emailRegex.test(email)) {
-        showError('Please enter a valid email address.');
-        emailInput.focus();
-        return;
-      }
+  if (!email || !emailRegex.test(email)) {
+    showError('Please enter a valid email address.');
+    emailInput.focus();
+    return;
+  }
 
-      const verifyBtn = document.getElementById('verifyEmailBtn');
-      setButtonLoading(verifyBtn, true);
+  const verifyBtn = document.getElementById('verifyEmailBtn');
+  const btnText = verifyBtn.querySelector('.btn-text');
+  verifyBtn.disabled = true;
+            verifyBtn.innerText = 'Sending...';
+            verifyBtn.classList.add('bg-gray-400', 'hover:bg-gray-400');
 
-      try {
-        const response = await fetch('/send_otp', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: email })
-        });
+  // Update UI immediately
+  verifyBtn.innerText.innerText = 'Sending...';
+  setButtonLoading(verifyBtn, true);
 
-        if (response.ok) {
-          document.getElementById('otpSection').classList.remove('hidden');
-          verifyBtn.disabled = true;
-          showSuccess('OTP sent to your email.');
-          document.getElementById('otpInput').focus();
-        } else {
-          const error = await response.json();
-          showError(error.error || 'Failed to send OTP.');
-        }
-      } catch (error) {
-        showError('Network error. Please try again.');
-      } finally {
-        setButtonLoading(verifyBtn, false);
-      }
+  // Ensure UI updates BEFORE async starts
+  await new Promise(requestAnimationFrame); // short delay to let the DOM update
+
+  try {
+    const response = await fetch('/send_otp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      document.getElementById('otpSection').style.display = 'block';
+      verifyBtn.disabled = true;
+      verifyBtn.innerText = 'Sent';
+      setButtonLoading(verifyBtn, false);
+      document.getElementById('otpInput').focus();
+      showSuccess('OTP sent to your email.');
+    } else {
+      btnText.innerText = 'Verify';
+      setButtonLoading(verifyBtn, false);
+      showError(data.error || 'Failed to send OTP.');
     }
+  } catch (error) {
+    btnText.innerText = 'Verify';
+    setButtonLoading(verifyBtn, false);
+    showError('Network error. Please try again.');
+  }
+}
 
     async function verifyOTP() {
       const emailInput = document.getElementById('emailInput');
@@ -1709,7 +1721,7 @@
         if (response.ok) {
           isEmailVerified = true;
           verifiedEmail = email;
-          document.getElementById('otpSection').classList.add('hidden');
+          document.getElementById('otpSection').style.display = 'none';
           emailInput.disabled = true;
           emailInput.style.background = 'var(--bg-tertiary)';
           toggleSignupButton();
@@ -1755,49 +1767,50 @@
     }
 
     function showError(message) {
-      const errorPopup = document.getElementById('flashPopup');
-      if (errorPopup) {
-        errorPopup.classList.add('error');
-        errorPopup.classList.remove('success');
-        errorPopup.style.display = 'block';
-        errorPopup.textContent = message;
-        setTimeout(() => {
-          errorPopup.style.display = 'none';
-        }, 5000);
-      } else {
-        alert(message);
-      }
-    }
-
-    function showSuccess(message) {
-      const successPopup = document.getElementById('flashPopup');
-      if (successPopup) {
-        successPopup.classList.add('success');
-        successPopup.classList.remove('error');
-        successPopup.style.display = 'block';
-        successPopup.textContent = message;
-        setTimeout(() => {
-          successPopup.style.display = 'none';
-        }, 5000);
-      } else {
-        alert(message);
-      }
-    }
-  // Toggle profile dropdown
-document.querySelector('.profile-icon').addEventListener('click', function (e) {
-  e.stopPropagation(); // Prevent closing when clicking inside
-  const dropdown = document.querySelector('.profile-dropdown');
-  dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-});
-
-// Close on outside click
-document.addEventListener('click', function (e) {
-  const profileMenu = document.querySelector('.profile-menu');
-  if (!profileMenu.contains(e.target)) {
-    document.querySelector('.profile-dropdown').style.display = 'none';
+  const errorPopup = document.getElementById('flashPopup');
+  if (errorPopup) {
+    errorPopup.classList.add('error');
+    errorPopup.classList.remove('success');
+    errorPopup.style.display = 'block';
+    errorPopup.textContent = message;
+    setTimeout(() => {
+      errorPopup.style.display = 'none';
+    }, 5000);
   }
-});
+  // Remove alert fallback if not needed:
+  // else { alert(message); }
+}
 
+function showSuccess(message) {
+  const successPopup = document.getElementById('flashPopup');
+  if (successPopup) {
+    successPopup.classList.add('success');
+    successPopup.classList.remove('error');
+    successPopup.style.display = 'block';
+    successPopup.textContent = message;
+    setTimeout(() => {
+      successPopup.style.display = 'none';
+    }, 5000);
+  }
+  // Remove alert fallback if not needed:
+  // else { alert(message); }
+}
+
+
+    // Toggle profile dropdown
+    document.querySelector('.profile-icon')?.addEventListener('click', function (e) {
+      e.stopPropagation(); // Prevent closing when clicking inside
+      const dropdown = document.querySelector('.profile-dropdown');
+      dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    });
+
+    // Close on outside click
+    document.addEventListener('click', function (e) {
+      const profileMenu = document.querySelector('.profile-menu');
+      if (profileMenu && !profileMenu.contains(e.target)) {
+        document.querySelector('.profile-dropdown').style.display = 'none';
+      }
+    });
   </script>
 </body>
 </html>
