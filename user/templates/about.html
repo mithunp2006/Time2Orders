@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home - Time2Order</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #f0f2f5 0%, #e0e7ff 100%);
+      color: #1f2937;
+      line-height: 1.6;
+    }
+    a { text-decoration: none; color: inherit; }
+    .navbar {
+      background-color: #ffffff;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #111827;
+      transition: color 0.3s ease;
+    }
+    .logo span { color: #3b82f6; }
+    .logo:hover { color: #3b82f6; }
+    .back-btn {
+      background-color: #3b82f6;
+      color: white;
+      padding: 0.6rem 1.2rem;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+    .back-btn:hover {
+      background-color: #2563eb;
+      transform: translateY(-2px);
+    }
+    .hero-section {
+      max-width: 1200px;
+      margin: 3rem auto;
+      padding: 2rem;
+      text-align: center;
+      background-color: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    .hero-section h1 {
+      font-size: 2.5rem;
+      color: #2d3748;
+      margin-bottom: 1.5rem;
+    }
+    .hero-section p {
+      font-size: 1.1rem;
+      color: #4a5568;
+      margin-bottom: 2rem;
+    }
+    .cta-btn {
+      background-color: #3b82f6;
+      color: white;
+      padding: 0.8rem 2rem;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+    .cta-btn:hover {
+      background-color: #2563eb;
+      transform: translateY(-2px);
+    }
+    .features-section {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background-color: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    .features-section h2 {
+      font-size: 1.8rem;
+      color: #2d3748;
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    .features-list {
+      list-style-type: none;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      justify-content: center;
+    }
+    .features-list li {
+      font-size: 1rem;
+      color: #4a5568;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex: 1 1 300px;
+    }
+    .features-list li i {
+      color: #3b82f6;
+    }
+    .loading-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .loading-spinner {
+      border: 6px solid #e5e7eb;
+      border-top: 6px solid #3b82f6;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #ffffff;
+      padding: 24px;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      z-index: 1001;
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+    }
+    .popup button {
+      margin-top: 16px;
+      padding: 8px 16px;
+      background: #3b82f6;
+      color: #ffffff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .popup button:hover {
+      background: #2563eb;
+    }
+    @media (max-width: 768px) {
+      .navbar { padding: 1rem; }
+      .hero-section, .features-section { margin: 1rem; padding: 1.5rem; }
+      .features-list li { flex: 1 1 100%; }
+    }
+    @media (max-width: 480px) {
+      .logo { font-size: 1.4rem; }
+      .back-btn, .cta-btn { padding: 0.5rem 1rem; }
+      .hero-section h1, .features-section h2 { font-size: 2rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+  </div>
+  <div class="popup" id="messagePopup">
+    <p id="popupMessage" class="text-lg font-semibold"></p>
+    <button onclick="closePopup()">OK</button>
+  </div>
+  <nav class="navbar">
+    <div class="logo">
+      <a href="/">Time<span>2</span>Order</a>
+    </div>
+    <div>
+      <a href="{{ url_for('view_cart') }}" class="back-btn">
+        <i class="fas fa-shopping-cart"></i> View Cart
+      </a>
+    </div>
+  </nav>
+  <section class="hero-section">
+    <h1>Welcome to Time2Order</h1>
+    <p>Discover a smarter way to shop locally. Pre-order from your favorite shops, skip the lines, and pick up your items at your convenience. Support local businesses with every order!</p>
+    <a href="/shops" class="cta-btn">Start Shopping Now</a>
+  </section>
+  <section class="features-section">
+    <h2>Why Time2Order?</h2>
+    <ul class="features-list">
+      <li><i class="fas fa-store"></i> Browse and pre-order from local shops in your area.</li>
+      <li><i class="fas fa-clock"></i> Save time with pre-scheduled pickups and skip long lines.</li>
+      <li><i class="fas fa-users"></i> Help shop owners manage crowds efficiently.</li>
+      <li><i class="fas fa-map-marker-alt"></i> Find shops easily by pincode or name.</li>
+      <li><i class="fas fa-truck"></i> Support your community by shopping local.</li>
+    </ul>
+  </section>
+  <footer style="background: #1f2937; color: #ffffff; padding: 3rem 2rem 2rem; margin-top: 4rem;">
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2rem;">
+      <div style="flex: 1; min-width: 250px;">
+        <h3 style="font-family: 'Poppins', sans-serif; font-size: 1.5rem; font-weight: 700; color: #4facfe;">Time2Order</h3>
+        <p style="margin-top: 1rem; line-height: 1.7; color: #cbd5e0;">
+          Your smart gateway to local shopping. Pre-order essentials and support your nearby vendors.
+        </p>
+      </div>
+      <div style="flex: 1; min-width: 200px;">
+        <h4 style="font-weight: 600; margin-bottom: 1rem;">Quick Links</h4>
+        <ul style="list-style: none; padding: 0; line-height: 2;">
+          <li><a href="/about" style="color: #cbd5e0; text-decoration: none;">About Us</a></li>
+          <li><a href="/terms" style="color: #cbd5e0; text-decoration: none;">Terms & Conditions</a></li>
+          <li><a href="/privacy" style="color: #cbd5e0; text-decoration: none;">Privacy Policy</a></li>
+          <li><a href="/contact" style="color: #cbd5e0; text-decoration: none;">Contact</a></li>
+        </ul>
+      </div>
+      <div style="flex: 1; min-width: 200px;">
+        <h4 style="font-weight: 600; margin-bottom: 1rem;">Connect With Us</h4>
+        <div style="display: flex; gap: 1rem; font-size: 1.25rem;">
+          <a href="#" style="color: #38bdf8;"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" style="color: #60a5fa;"><i class="fab fa-twitter"></i></a>
+          <a href="#" style="color: #f87171;"><i class="fab fa-instagram"></i></a>
+          <a href="#" style="color: #34d399;"><i class="fab fa-whatsapp"></i></a>
+        </div>
+      </div>
+    </div>
+    <hr style="margin: 2rem 0; border-color: rgba(255,255,255英寸
+    <p style="text-align: center; color: #a0aec0; font-size: 0.9rem;">
+      © {{ current_year or 2025 }} Time2Order. All rights reserved.
+    </p>
+  </footer>
+  <script>
+    function closePopup() {
+      document.getElementById('messagePopup').style.display = 'none';
+    }
+  </script>
+</body>
+</html>

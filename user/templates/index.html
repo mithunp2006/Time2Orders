@@ -1,0 +1,1803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Time2Order - Your Local Shopping Companion</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      --success-gradient: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+      --warning-gradient: linear-gradient(135deg, #fc466b 0%, #3f5efb 100%);
+      
+      --primary-color: #667eea;
+      --primary-dark: #5a67d8;
+      --secondary-color: #f093fb;
+      --accent-color: #4facfe;
+      --success-color: #38ef7d;
+      --warning-color: #fc466b;
+      
+      --text-primary: #1a202c;
+      --text-secondary: #4a5568;
+      --text-light: #718096;
+      --text-white: #ffffff;
+      
+      --bg-primary: #ffffff;
+      --bg-secondary: #f7fafc;
+      --bg-tertiary: #edf2f7;
+      --bg-dark: #1a202c;
+      --bg-glass: rgba(255, 255, 255, 0.1);
+      
+      --border-color: #e2e8f0;
+      --border-light: #f1f5f9;
+      
+      --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      --shadow-glow: 0 0 20px rgba(102, 126, 234, 0.4);
+      
+      --radius-sm: 0.375rem;
+      --radius-md: 0.5rem;
+      --radius-lg: 0.75rem;
+      --radius-xl: 1rem;
+      --radius-2xl: 1.5rem;
+      --radius-3xl: 2rem;
+      
+      --transition-fast: 0.15s ease;
+      --transition-normal: 0.3s ease;
+      --transition-slow: 0.5s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      color: var(--text-primary);
+      background: var(--primary-gradient);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Animated Background */
+    .animated-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: var(--primary-gradient);
+    }
+
+    .animated-bg::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+      animation: float 20s ease-in-out infinite;
+    }
+
+    .floating-shapes {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .shape {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      animation: float 15s ease-in-out infinite;
+    }
+
+    .shape:nth-child(1) {
+      width: 80px;
+      height: 80px;
+      top: 20%;
+      left: 10%;
+      animation-delay: 0s;
+    }
+
+    .shape:nth-child(2) {
+      width: 120px;
+      height: 120px;
+      top: 60%;
+      right: 10%;
+      animation-delay: 2s;
+    }
+
+    .shape:nth-child(3) {
+      width: 60px;
+      height: 60px;
+      top: 80%;
+      left: 20%;
+      animation-delay: 4s;
+    }
+
+    .shape:nth-child(4) {
+      width: 100px;
+      height: 100px;
+      top: 10%;
+      right: 30%;
+      animation-delay: 6s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      33% { transform: translateY(-20px) rotate(120deg); }
+      66% { transform: translateY(20px) rotate(240deg); }
+    }
+
+    /* Glassmorphism Navbar */
+    .navbar {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .navbar-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 800;
+      font-size: 1.75rem;
+      color: var(--text-white);
+      transition: var(--transition-normal);
+      position: relative;
+    }
+
+    .logo::before {
+      content: '';
+      position: absolute;
+      top: -5px;
+      left: -5px;
+      right: -5px;
+      bottom: -5px;
+      background: var(--accent-gradient);
+      border-radius: var(--radius-xl);
+      opacity: 0;
+      transition: var(--transition-normal);
+      z-index: -1;
+    }
+
+    .logo:hover::before {
+      opacity: 0.2;
+    }
+
+    .logo:hover {
+      transform: scale(1.05);
+      text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+    }
+
+    .logo img {
+      height: 45px;
+      margin-right: 1rem;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+    }
+
+    .logo-text {
+      background: linear-gradient(135deg, #ffffff 0%, #f0f8ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .navbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .location-display {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1.5rem;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border-radius: var(--radius-2xl);
+      cursor: pointer;
+      transition: var(--transition-normal);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: var(--text-white);
+      font-weight: 500;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .location-display::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: var(--transition-slow);
+    }
+
+    .location-display:hover::before {
+      left: 100%;
+    }
+
+    .location-display:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .pincode-dropdown {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      padding: 2rem;
+      border-radius: var(--radius-2xl);
+      box-shadow: var(--shadow-2xl);
+      z-index: 1000;
+      min-width: 350px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      margin-top: 1rem;
+    }
+
+    .pincode-dropdown.show {
+      display: block;
+      animation: slideDownFade 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes slideDownFade {
+      from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .dropdown-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .form-input {
+      padding: 1rem 1.5rem;
+      border: 2px solid var(--border-light);
+      border-radius: var(--radius-xl);
+      font-size: 0.95rem;
+      transition: var(--transition-normal);
+      background: var(--bg-primary);
+      font-weight: 500;
+      position: relative;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+      transform: translateY(-1px);
+    }
+
+    .btn {
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: var(--radius-xl);
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition-normal);
+      font-size: 0.95rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      position: relative;
+      overflow: hidden;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: var(--transition-slow);
+    }
+
+    .btn:hover::before {
+      left: 100%;
+    }
+
+    .btn-primary {
+      background: var(--primary-gradient);
+      color: var(--text-white);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-2xl);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg-primary);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .btn-glass {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      color: var(--text-white);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-glass:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .profile-menu {
+      position: relative;
+    }
+
+    .profile-icon {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1.5rem;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border-radius: var(--radius-2xl);
+      cursor: pointer;
+      transition: var(--transition-normal);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: var(--text-white);
+      font-weight: 500;
+    }
+
+    .profile-icon:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .profile-dropdown {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      padding: 1rem;
+      border-radius: var(--radius-2xl);
+      box-shadow: var(--shadow-2xl);
+      z-index: 1000;
+      min-width: 220px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      margin-top: 1rem;
+    }
+
+    .profile-menu:hover .profile-dropdown {
+      animation: slideDownFade 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .profile-dropdown a {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem 1.25rem;
+      color: var(--text-primary);
+      text-decoration: none;
+      border-radius: var(--radius-lg);
+      transition: var(--transition-normal);
+      font-weight: 500;
+    }
+
+    .profile-dropdown a:hover {
+      background: var(--primary-gradient);
+      color: var(--text-white);
+      transform: translateX(5px);
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 6rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      min-height: 80vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border-radius: var(--radius-2xl);
+      color: var(--text-white);
+      font-weight: 500;
+      margin-bottom: 2rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      animation: fadeInUp 1s ease 0.2s both;
+    }
+
+    .hero h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: clamp(3rem, 8vw, 6rem);
+      font-weight: 900;
+      margin-bottom: 1.5rem;
+      color: var(--text-white);
+      line-height: 1.1;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      animation: fadeInUp 1s ease 0.4s both;
+    }
+
+    .hero-highlight {
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      position: relative;
+    }
+
+    .hero p {
+      font-size: 1.5rem;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 3rem;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+      font-weight: 400;
+      line-height: 1.6;
+      animation: fadeInUp 1s ease 0.6s both;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      animation: fadeInUp 1s ease 0.8s both;
+    }
+
+    .hero-btn {
+      padding: 1.25rem 3rem;
+      font-size: 1.25rem;
+      font-weight: 700;
+      border-radius: var(--radius-2xl);
+      cursor: pointer;
+      transition: var(--transition-normal);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      position: relative;
+      overflow: hidden;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .hero-btn-primary {
+      background: var(--accent-gradient);
+      color: var(--text-white);
+      box-shadow: var(--shadow-2xl);
+      border: none;
+    }
+
+    .hero-btn-primary:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(79, 172, 254, 0.4);
+    }
+
+    .hero-btn-secondary {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      color: var(--text-white);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .hero-btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-glow);
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+.shops {
+    padding: 40px 20px;
+    background-color: #f9f9f9;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.shops-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px 0;
+}
+
+.shop-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: contents; /* Allows the grid to apply to the child .shop-card */
+}
+
+.shop-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    width: 100%; /* Ensures the card fills the grid cell */
+}
+
+.shop-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.shop-image {
+    position: relative;
+    width: 100%;
+    height: 150px;
+    overflow: hidden;
+}
+
+.shop-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.shop-status {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #28a745;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+.shop-details {
+    padding: 15px;
+    text-align: left;
+}
+
+.shop-details h3 {
+    margin: 0 0 10px;
+    font-size: 1.2em;
+    color: #333;
+}
+
+.shop-details p {
+    margin: 5px 0;
+    color: #666;
+    font-size: 0.9em;
+}
+
+.map-link {
+    display: inline-block;
+    margin-top: 10px;
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.map-link:hover {
+    text-decoration: underline;
+}
+
+.no-shops {
+    text-align: center;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+    /* Enhanced Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(10px);
+    }
+
+    .modal-content {
+      background: var(--bg-primary);
+      margin: 3% auto;
+      padding: 3rem;
+      border-radius: var(--radius-2xl);
+      width: 90%;
+      max-width: 500px;
+      box-shadow: var(--shadow-2xl);
+      position: relative;
+      animation: modalSlideIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border: 1px solid var(--border-light);
+    }
+
+    @keyframes modalSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-50px) scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: var(--bg-tertiary);
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition-normal);
+      font-size: 1.2rem;
+    }
+
+    .modal-close:hover {
+      background: var(--primary-color);
+      color: var(--text-white);
+      transform: scale(1.1);
+    }
+
+    .modal-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .modal-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.75rem;
+    }
+
+    .modal-subtitle {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+
+    .modal-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .email-verification {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .verification-row {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .verification-row .form-input {
+      flex: 1;
+    }
+
+    .verification-row .btn {
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+
+    #otpSection {
+      display: none;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin: 1.5rem 0;
+      padding: 1.5rem;
+      background: var(--bg-secondary);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-light);
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      margin-top: 0.25rem;
+      transform: scale(1.2);
+    }
+
+    .checkbox-group label {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .checkbox-group a {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .checkbox-group a:hover {
+      text-decoration: underline;
+    }
+
+    .modal-footer {
+      text-align: center;
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border-light);
+    }
+
+    .modal-footer a {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .modal-footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Enhanced Popup Styles */
+    .popup {
+      display: none;
+      position: fixed;
+      top: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 3000;
+      padding: 1.5rem 2rem;
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-2xl);
+      max-width: 90%;
+      text-align: center;
+      font-size: 1rem;
+      font-weight: 600;
+      animation: popupSlideIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      backdrop-filter: blur(10px);
+    }
+
+    @keyframes popupSlideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-30px) scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0) scale(1);
+      }
+    }
+
+    .popup.error {
+      background: rgba(252, 70, 107, 0.95);
+      color: var(--text-white);
+      border: 1px solid rgba(252, 70, 107, 0.3);
+    }
+
+    .popup.success {
+      background: rgba(56, 239, 125, 0.95);
+      color: var(--text-white);
+      border: 1px solid rgba(56, 239, 125, 0.3);
+    }
+
+    .close-popup {
+      margin-left: 1.5rem;
+      cursor: pointer;
+      font-weight: 800;
+      opacity: 0.8;
+      transition: var(--transition-fast);
+      font-size: 1.2rem;
+    }
+
+    .close-popup:hover {
+      opacity: 1;
+      transform: scale(1.2);
+    }
+
+    /* Loading Animation */
+    .loading {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+ HD
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+      .shops-grid {
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 2rem;
+        align-items: stretch;
+
+      }
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 1rem;
+      }
+
+      .navbar-container {
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+
+      .navbar-actions {
+        width: 100%;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+
+      .hero {
+        padding: 4rem 1rem;
+        min-height: 70vh;
+      }
+
+      .hero h1 {
+        font-size: clamp(2.5rem, 8vw, 4rem);
+      }
+
+      .hero p {
+        font-size: 1.25rem;
+      }
+
+      .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .hero-btn {
+        width: 100%;
+        max-width: 300px;
+      }
+
+      .shops-section {
+        padding: 4rem 1rem;
+      }
+
+      .shops-grid {
+  align-items: stretch;
+}
+      .shops-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.5rem;
+      }
+
+
+      .modal-content {
+        margin: 5% auto;
+        width: 95%;
+        padding: 2rem;
+      }
+
+      .verification-row {
+        flex-direction: column;
+      }
+
+      .pincode-dropdown {
+        min-width: 300px;
+        padding: 1.5rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero {
+        padding: 3rem 1rem;
+      }
+
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+
+      .hero p {
+        font-size: 1.1rem;
+      }
+
+      .section-title {
+        font-size: 2rem;
+      }
+
+      .modal-content {
+        padding: 1.5rem;
+      }
+
+      .modal-title {
+        font-size: 1.5rem;
+      }
+    }
+
+    /* Utility Classes */
+    .disabled {
+      opacity: 0.6;
+      cursor: not-allowed !important;
+      pointer-events: none;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* Scroll Animations */
+    .fade-in-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: var(--transition-slow);
+    }
+
+    .fade-in-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .shops-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+}
+.shop-card {
+    transition: transform 0.2s;
+}
+.shop-card:hover {
+    transform: translateY(-5px);
+}
+.fade-in-up {
+    animation: fadeInUp 0.5s ease-out;
+}
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+  </style>
+</head>
+<body>
+  <div class="animated-bg"></div>
+  <div class="floating-shapes">
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+  </div>
+
+  <nav class="navbar">
+    <div class="navbar-container">
+      <a href="/about" class="logo">
+        <img src="/static/logo.jpg" alt="Time2Order Logo" />
+        <span class="logo-text">Time<span style="color: #4facfe;">2</span>Order</span>
+      </a>
+      <div class="navbar-actions">
+        <div class="location-display" onclick="togglePincodeInput()" role="button" tabindex="0" aria-label="Change location">
+          <i class="fas fa-map-marker-alt"></i>
+          <span id="locationText">{{ pincode or 'Set Location' }}</span>
+          <i class="fas fa-chevron-down" style="font-size: 0.75rem; margin-left: 0.25rem;"></i>
+        </div>
+        <div class="pincode-dropdown" id="pincodeDropdown">
+<form method="POST" action="/search" class="dropdown-form">
+  <div class="form-group">
+    <label for="pincode" class="sr-only">Pincode</label>
+    <input type="text" id="pincodeSearchInput" name="pincode" placeholder="Enter Pincode" class="form-input" required />
+    <button type="submit" class="btn btn-primary">
+      <i class="fas fa-search"></i>
+      Search by Pincode
+    </button>
+  </div>
+</form>
+<form method="GET" action="/searchshop" class="dropdown-form">
+  <div class="form-group">
+    <label for="shopNameInput" class="sr-only">Shop Name</label>
+    <input type="text" name="shop_name" id="shopNameInput" placeholder="Enter Shop Name" class="form-input" required />
+    <input type="text" name="pincode" placeholder="Enter Postal Code (optional)" class="form-input" />
+    <button type="submit" class="btn btn-secondary">
+      <i class="fas fa-store"></i>
+      Search Shop
+    </button>
+  </div>
+</form>
+        </div>
+        {% if is_logged_in %}
+          <div class="profile-menu">
+            <div class="profile-icon" role="button" tabindex="0" aria-label="User menu">
+              <i class="fas fa-user-circle"></i>
+              <span>{{ username }}</span>
+              <i class="fas fa-chevron-down" style="font-size: 0.75rem;"></i>
+            </div>
+            <div class="profile-dropdown">
+              <a href="{{ url_for('view_cart') }}">
+                <i class="fas fa-shopping-cart"></i>
+                View Cart
+              </a>
+              <a href="{{ url_for('profile') }}">
+                <i class="fas fa-user"></i>
+                Profile
+              </a>
+              <a href="{{ url_for('orders') }}">
+                <i class="fas fa-receipt"></i>
+                Orders
+              </a>
+              <a href="{{ url_for('logout') }}">
+                <i class="fas fa-sign-out-alt"></i>
+                Logout
+              </a>
+            </div>
+          </div>
+        {% else %}
+          <button type="button" class="btn btn-glass" onclick="document.getElementById('signupModal').style.display='block'">
+            <i class="fas fa-user-plus"></i>
+            Sign Up
+          </button>
+          <button type="button" class="btn btn-glass" onclick="document.getElementById('loginModal').style.display='block'">
+            <i class="fas fa-sign-in-alt"></i>
+            Log In
+          </button>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <i class="fas fa-star"></i>
+        <span>Your Local Shopping Revolution</span>
+      </div>
+      <h1>From Your <span class="hero-highlight">Favorite</span> Local Shops</h1>
+      <p>Pre-book items, skip the waiting lines, and get your orders ready for pickup when you arrive. Experience the future of local shopping today.</p>
+      <div class="hero-buttons">
+        <button type="button" class="hero-btn hero-btn-primary" onclick="document.querySelector('.form-input').focus()">
+          <i class="fas fa-search"></i>
+          Explore Shops
+        </button>
+        <a href="/about" class="hero-btn hero-btn-secondary">
+          <i class="fas fa-info-circle"></i>
+          Learn More
+        </a>
+      </div>
+    </div>
+  </section>
+
+<section class="shops">
+    <div class="container">
+        <h2>Local Shops</h2>
+        <p>Popular Shops Near You</p>
+        <p>
+            {% if pincode %}
+                Discover amazing local shops in {{ pincode }} and start your convenient shopping journey
+            {% else %}
+                Discover amazing local shops in your area and start your convenient shopping journey
+            {% endif %}
+        </p>
+
+        <div class="shops-grid">
+            {% if shops %}
+                {% for shop in shops %}
+                    <a href="/shop/{{ shop.id }}" class="shop-card-link" title="View details for {{ shop.shop_name }}">
+                        <div class="shop-card">
+                            {% set image_url = 
+                                'https://images2.alphacoders.com/862/862730.jpg' if shop.category == 'meat' else
+                                'https://i.pinimg.com/originals/da/ed/b3/daedb3e27d0411845df77e13675a0970.jpg' if shop.category == 'RO Shop' else
+                                'https://images2.alphacoders.com/862/862730.jpg' if shop.category == 'hostel' else
+                                'https://plus.unsplash.com/premium_photo-1664202526559-e21e9c0fb46a?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8ZmFzaGlvbnxlbnwwfHwwfHx8MA%3D%3D' if shop.category == 'Fashion' else
+                                'https://i.imgur.com/5xyoeGk.jpg' 
+                            %}
+                            <div class="shop-image">
+                                <img src="{{ image_url }}" alt="{{ shop.shop_name }}">
+                                <span class="shop-status">{{ shop.shop_status }}</span>
+                            </div>
+                            <div class="shop-details">
+                                <h3>{{ shop.shop_name }}</h3>
+                                <p>{{ shop.shop_owner_name }}</p>
+                                <p>{{ shop.shop_address }}</p>
+                                <p>{{ shop.category }}</p>
+                                <a href="/shop/{{ shop.id }}/map" class="map-link">View Map</a>
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+            {% else %}
+                <div class="no-shops">
+                    <p>No shops found in this area</p>
+                    <p>Try searching with a different postal code or explore other locations.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+  <!-- Flash Messages Popup -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages and show_modal %}
+      <div class="popup {{ 'error' if messages[0][0] == 'error' else 'success' }}" id="flashPopup">
+        {{ messages[0][1] }}
+        <span class="close-popup" onclick="document.getElementById('flashPopup').style.display='none'" aria-label="Close">×</span>
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <!-- Signup Modal -->
+  <div id="signupModal" class="modal" role="dialog" aria-labelledby="signupModalTitle" aria-hidden="true">
+    <div class="modal-content">
+      <button class="modal-close" onclick="document.getElementById('signupModal').style.display='none'" aria-label="Close">
+        <i class="fas fa-times"></i>
+      </button>
+      <div class="modal-header">
+        <h2 id="signupModalTitle" class="modal-title">Create Your Account</h2>
+        <p class="modal-subtitle">Join Time2Order and start shopping from your favorite local stores</p>
+      </div>
+      <form method="POST" action="{{ url_for('register') }}" id="signupForm" class="modal-form" onsubmit="return validateSignupForm(event)">
+        <input type="text" name="name" id="nameInput" placeholder="Full Name" class="form-input" required aria-required="true" />
+        <input type="text" name="username" id="usernameInput" placeholder="Username" class="form-input" required aria-required="true" />
+        
+        <div class="email-verification">
+          <div class="verification-row">
+            <input type="email" name="email" id="emailInput" placeholder="Email Address" class="form-input" required aria-required="true" />
+            <button type="button" id="verifyEmailBtn" class="btn btn-secondary" onclick="sendOTP()">
+              <span class="btn-text">Verify</span>
+              <span class="loading hidden"></span>
+            </button>
+          </div>
+        </div>
+        
+        <div id="otpSection" class="hidden">
+          <div class="verification-row">
+            <input type="text" name="otp" id="otpInput" placeholder="Enter 6-digit OTP" class="form-input" maxlength="6" />
+            <button type="button" id="verifyOTPBtn" class="btn btn-primary" onclick="verifyOTP()">
+              <span class="btn-text">Verify</span>
+              <span class="loading hidden"></span>
+            </button>
+          </div>
+        </div>
+        
+        <input type="text" name="phone_number" id="phoneNumberInput" placeholder="Phone Number" class="form-input" required aria-required="true" />
+        <input type="password" name="password" id="passwordInput" placeholder="Password" class="form-input" required aria-required="true" />
+        <input type="password" name="confirm_password" id="confirmPasswordInput" placeholder="Confirm Password" class="form-input" required aria-required="true" />
+        <input type="text" name="address" id="addressInput" placeholder="Address" class="form-input" required aria-required="true" />
+        <input type="text" name="postal_code" id="postalCodeSignupInput" placeholder="Postal Code" class="form-input" required aria-required="true" />
+        <input type="text" name="alt_phone_number" id="altPhoneNumberInput" placeholder="Alternate Phone Number (Optional)" class="form-input" />
+        
+        <div class="checkbox-group">
+          <input type="checkbox" name="terms" id="termsCheckbox" required aria-required="true" onchange="toggleSignupButton()">
+          <label for="termsCheckbox">
+            I agree to the <a href="/terms" target="_blank">Terms and Conditions</a> and <a href="/privacy" target="_blank">Privacy Policy</a>
+          </label>
+        </div>
+        
+        <button type="submit" id="signupBtn" class="btn btn-primary" disabled>
+          <span class="btn-text">Create Account</span>
+          <span class="loading hidden"></span>
+        </button>
+      </form>
+      <div class="modal-footer">
+        <p>Already have an account? <a href="#" onclick="document.getElementById('signupModal').style.display='none'; document.getElementById('loginModal').style.display='block';">Sign in here</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Login Modal -->
+  <div id="loginModal" class="modal" {% if show_modal == 'login' %}style="display:block;"{% endif %} role="dialog" aria-labelledby="loginModalTitle" aria-hidden="true">
+    <div class="modal-content">
+      <button class="modal-close" onclick="document.getElementById('loginModal').style.display='none'" aria-label="Close">
+        <i class="fas fa-times"></i>
+      </button>
+      <div class="modal-header">
+        <h2 id="loginModalTitle" class="modal-title">Welcome Back</h2>
+        <p class="modal-subtitle">Sign in to your Time2Order account</p>
+      </div>
+      <form method="POST" action="{{ url_for('login') }}" class="modal-form">
+        <input type="text" name="username" placeholder="Username or Email" class="form-input" required aria-required="true" />
+        <input type="password" name="password" placeholder="Password" class="form-input" required aria-required="true" />
+        <button type="submit" class="btn btn-primary">
+          <i class="fas fa-sign-in-alt"></i>
+          Sign In
+        </button>
+      </form>
+      <div class="modal-footer">
+        <p><a href="#" onclick="document.getElementById('loginModal').style.display='none'; document.getElementById('forgotPasswordModal').style.display='block';">Forgot your password?</a></p>
+        <p>Don't have an account? <a href="#" onclick="document.getElementById('loginModal').style.display='none'; document.getElementById('signupModal').style.display='block';">Create one here</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Forgot Password Modal -->
+  <div id="forgotPasswordModal" class="modal" {% if show_modal == 'forgot' %}style="display:block;"{% endif %} role="dialog" aria-labelledby="forgotPasswordModalTitle" aria-hidden="true">
+    <div class="modal-content">
+      <button class="modal-close" onclick="document.getElementById('forgotPasswordModal').style.display='none'" aria-label="Close">
+        <i class="fas fa-times"></i>
+      </button>
+      <div class="modal-header">
+        <h2 id="forgotPasswordModalTitle" class="modal-title">Reset Password</h2>
+        <p class="modal-subtitle">Enter your email to receive a password reset code</p>
+      </div>
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="popup {{ 'error' if messages[0][0] == 'error' else 'success' }}" id="forgotFlashPopup" style="display:block; position: relative; top: 0; left: 0; transform: none; margin-bottom: 1rem;">
+            {{ messages[0][1] }}
+            <span class="close-popup" onclick="document.getElementById('forgotFlashPopup').style.display='none'">×</span>
+          </div>
+        {% endif %}
+      {% endwith %}
+      <form method="POST" action="{{ url_for('reset_password') }}" class="modal-form">
+        <input type="email" name="email" placeholder="Email Address" class="form-input" required aria-required="true" />
+        <button type="submit" class="btn btn-primary">
+          <i class="fas fa-paper-plane"></i>
+          Send Reset Code
+        </button>
+      </form>
+      <div class="modal-footer">
+        <p><a href="#" onclick="document.getElementById('forgotPasswordModal').style.display='none'; document.getElementById('loginModal').style.display='block';">Back to Sign In</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Verify OTP Modal -->
+  <div id="verifyOtpModal" class="modal" {% if show_modal == 'verify_otp' %}style="display:block;"{% endif %} role="dialog" aria-labelledby="verifyOtpModalTitle" aria-hidden="true">
+    <div class="modal-content">
+      <button class="modal-close" onclick="document.getElementById('verifyOtpModal').style.display='none'" aria-label="Close">
+        <i class="fas fa-times"></i>
+      </button>
+      <div class="modal-header">
+        <h2 id="verifyOtpModalTitle" class="modal-title">Verify Reset Code</h2>
+        <p class="modal-subtitle">Enter the 6-digit code sent to your email</p>
+      </div>
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="popup {{ 'error' if messages[0][0] == 'error' else 'success' }}" id="verifyOtpFlashPopup" style="display:block; position: relative; top: 0; broken link reference fragment identifier: 0; transform: none; margin-bottom: 1rem;">
+            {{ messages[0][1] }}
+            <span class="close-popup" onclick="document.getElementById('verifyOtpFlashPopup').style.display='none'">×</span>
+          </div>
+        {% endif %}
+      {% endwith %}
+      <form method="POST" action="{{ url_for('reset_password_verify') }}" class="modal-form">
+        <input type="text" name="otp" placeholder="6-digit code" class="form-input" required aria-required="true" maxlength="6" />
+        <button type="submit" class="btn btn-primary">
+          <i class="fas fa-check"></i>
+          Verify Code
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Change Password Modal -->
+  <div id="changePasswordModal" class="modal" {% if show_modal == 'change_password' %}style="display:block;"{% endif %} role="dialog" aria-labelledby="changePasswordModalTitle" aria-hidden="true">
+    <div class="modal-content">
+      <button class="modal-close" onclick="document.getElementById('changePasswordModal').style.display='none'" aria-label="Close">
+        <i class="fas fa-times"></i>
+      </button>
+      <div class="modal-header">
+        <h2 id="changePasswordModalTitle" class="modal-title">Set New Password</h2>
+        <p class="modal-subtitle">Enter your new password</p>
+      </div>
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="popup {{ 'error' if category == 'error' else 'success' }}" style="display:block; position: relative; top: 0; left: 0; transform: none; margin-bottom: 1rem;">
+              {{ message }}
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+      <form method="POST" action="{{ url_for('reset_password_change') }}" class="modal-form">
+        <input type="password" name="password" placeholder="New Password" class="form-input" required aria-required="true" />
+        <input type="password" name="confirm_password" placeholder="Confirm New Password" class="form-input" required aria-required="true" />
+        <button type="submit" class="btn btn-primary">
+          <i class="fas fa-save"></i>
+          Update Password
+        </button>
+      </form>
+    </div>
+  </div>
+<!-- Footer -->
+<footer style="background: var(--bg-dark); color: var(--text-white); padding: 3rem 2rem 2rem; margin-top: 4rem;">
+  <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2rem;">
+    <div style="flex: 1; min-width: 250px;">
+      <h3 style="font-family: 'Poppins', sans-serif; font-size: 1.5rem; font-weight: 700; color: #4facfe;">Time2Order</h3>
+      <p style="margin-top: 1rem; line-height: 1.7; color: var(--text-light);">
+        Your smart gateway to local shopping. Pre-order essentials and support your nearby vendors.
+      </p>
+    </div>
+
+    <div style="flex: 1; min-width: 200px;">
+      <h4 style="font-weight: 600; margin-bottom: 1rem;">Quick Links</h4>
+      <ul style="list-style: none; padding: 0; line-height: 2;">
+        <li><a href="/about" style="color: #cbd5e0; text-decoration: none;">About Us</a></li>
+        <li><a href="/terms" style="color: #cbd5e0; text-decoration: none;">Terms & Conditions</a></li>
+        <li><a href="/privacy_policy" style="color: #cbd5e0; text-decoration: none;">Privacy Policy</a></li>
+        <li><a href="/contact" style="color: #cbd5e0; text-decoration: none;">Contact</a></li>
+      </ul>
+    </div>
+
+    <div style="flex: 1; min-width: 200px;">
+      <h4 style="font-weight: 600; margin-bottom: 1rem;">Connect With Us</h4>
+      <div style="display: flex; gap: 1rem; font-size: 1.25rem;">
+        <a href="#" style="color: #38bdf8;"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" style="color: #60a5fa;"><i class="fab fa-twitter"></i></a>
+        <a href="#" style="color: #f87171;"><i class="fab fa-instagram"></i></a>
+        <a href="#" style="color: #34d399;"><i class="fab fa-whatsapp"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <hr style="margin: 2rem 0; border-color: rgba(255,255,255,0.1);" />
+
+  <p style="text-align: center; color: #a0aec0; font-size: 0.9rem;">
+    &copy; {{ current_year or 2025 }} Time2Order. All rights reserved.
+  </p>
+</footer>
+
+  <script>
+    // Global variables
+    let isEmailVerified = false;
+    let verifiedEmail = '';
+
+    // Initialize page
+    window.onload = function() {
+      initializeModals();
+      initializePopups();
+      setupKeyboardNavigation();
+      initializeShopCards();
+    };
+
+    function initializeShopCards() {
+      const shopCards = document.querySelectorAll('.shop-card');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+
+      shopCards.forEach(card => {
+        observer.observe(card);
+      });
+    }
+
+    function initializeModals() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const showModal = urlParams.get('show_modal');
+      const modals = {
+        'login': 'loginModal',
+        'signup': 'signupModal',
+        'forgot': 'forgotPasswordModal',
+        'verify_otp': 'verifyOtpModal',
+        'change_password': 'changePasswordModal'
+      };
+
+      if (showModal && modals[showModal]) {
+        document.getElementById(modals[showModal]).style.display = 'block';
+      }
+    }
+
+    function initializePopups() {
+      const popups = ['flashPopup', 'forgotFlashPopup', 'verifyOtpFlashPopup'];
+      popups.forEach(id => {
+        const popup = document.getElementById(id);
+        if (popup && popup.style.display !== 'none') {
+          setTimeout(() => {
+            popup.style.display = 'none';
+          }, 5000);
+        }
+      });
+    }
+
+    function setupKeyboardNavigation() {
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+          closeAllModals();
+        }
+      });
+
+      // Add keyboard support for dropdown toggles
+      document.querySelector('.location-display').addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          togglePincodeInput();
+        }
+      });
+    }
+
+    function closeAllModals() {
+      const modals = ['loginModal', 'signupModal', 'forgotPasswordModal', 'verifyOtpModal', 'changePasswordModal'];
+      const popups = ['flashPopup', 'forgotFlashPopup', 'verifyOtpFlashPopup'];
+      
+      [...modals, ...popups].forEach(id => {
+        const element = document.getElementById(id);
+        if (element) element.style.display = 'none';
+      });
+    }
+
+    function togglePincodeInput() {
+      const dropdown = document.getElementById('pincodeDropdown');
+      const isVisible = dropdown.classList.contains('show');
+      
+      if (isVisible) {
+        dropdown.classList.remove('show');
+        setTimeout(() => {
+          dropdown.style.display = 'none';
+        }, 300);
+      } else {
+        dropdown.style.display = 'block';
+        setTimeout(() => {
+          dropdown.classList.add('show');
+        }, 10);
+      }
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (event) => {
+      const dropdown = document.getElementById('pincodeDropdown');
+      const locationDisplay = document.querySelector('.location-display');
+      
+      if (dropdown && locationDisplay && 
+          !dropdown.contains(event.target) && 
+          !locationDisplay.contains(event.target)) {
+        dropdown.classList.remove('show');
+        setTimeout(() => {
+          dropdown.style.display = 'none';
+        }, 300);
+      }
+    });
+
+    function submitPincodeForm() {
+      const input = document.getElementById('postalCodeSearchInput');
+      if (!input.value.trim()) {
+        alert('Please enter a postal code.');
+        return false;
+      }
+      return true;
+    }
+
+    function validateSignupForm(event) {
+      event.preventDefault();
+      const form = document.getElementById('signupForm');
+      const formData = new FormData(form);
+
+      if (verifiedEmail) {
+        formData.set('email', verifiedEmail);
+      }
+
+      // Validate required fields
+      const requiredFields = [
+        { id: 'nameInput', name: 'Full Name' },
+        { id: 'usernameInput', name: 'Username' },
+        { id: 'phoneNumberInput', name: 'Phone Number' },
+        { id: 'passwordInput', name: 'Password' },
+        { id: 'confirmPasswordInput', name: 'Confirm Password' },
+        { id: 'addressInput', name: 'Address' },
+        { id: 'postalCodeSignupInput', name: 'Postal Code' }
+      ];
+
+      for (const field of requiredFields) {
+        const element = document.getElementById(field.id);
+        if (!element.value.trim()) {
+          showError(`Please fill in the ${field.name} field.`);
+          element.focus();
+          return false;
+        }
+      }
+
+      // Validate password match
+      const password = document.getElementById('passwordInput').value;
+      const confirmPassword = document.getElementById('confirmPasswordInput').value;
+      if (password !== confirmPassword) {
+        showError('Passwords do not match.');
+        return false;
+      }
+
+      // Validate email
+      const email = verifiedEmail || document.getElementById('emailInput').value.trim();
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        showError('Please enter a valid email address.');
+        return false;
+      }
+
+      // Check email verification
+      if (!isEmailVerified) {
+        showError('Please verify your email first.');
+        return false;
+      }
+
+      // Show loading state
+      const submitBtn = document.getElementById('signupBtn');
+      setButtonLoading(submitBtn, true);
+
+      // Submit form
+      fetch(form.action, {
+        method: form.method,
+        body: formData
+      })
+      .then(response => {
+        if (response.redirected) {
+          window.location.href = response.url;
+        } else {
+          return response.text().then(text => {
+            setButtonLoading(submitBtn, false);
+            showError('Registration failed. Please try again.');
+          });
+        }
+      })
+      .catch(error => {
+        setButtonLoading(submitBtn, false);
+        showError('Network error. Please try again.');
+      });
+
+      return false;
+    }
+
+    async function sendOTP() {
+      const emailInput = document.getElementById('emailInput');
+      const email = emailInput.value.trim();
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      if (!email || !emailRegex.test(email)) {
+        showError('Please enter a valid email address.');
+        emailInput.focus();
+        return;
+      }
+
+      const verifyBtn = document.getElementById('verifyEmailBtn');
+      setButtonLoading(verifyBtn, true);
+
+      try {
+        const response = await fetch('/send_otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email })
+        });
+
+        if (response.ok) {
+          document.getElementById('otpSection').classList.remove('hidden');
+          verifyBtn.disabled = true;
+          showSuccess('OTP sent to your email.');
+          document.getElementById('otpInput').focus();
+        } else {
+          const error = await response.json();
+          showError(error.error || 'Failed to send OTP.');
+        }
+      } catch (error) {
+        showError('Network error. Please try again.');
+      } finally {
+        setButtonLoading(verifyBtn, false);
+      }
+    }
+
+    async function verifyOTP() {
+      const emailInput = document.getElementById('emailInput');
+      const otpInput = document.getElementById('otpInput');
+      const email = emailInput.value.trim();
+      const otp = otpInput.value.trim();
+
+      if (!email || !otp) {
+        showError('Please enter both email and OTP.');
+        return;
+      }
+
+      const verifyBtn = document.getElementById('verifyOTPBtn');
+      setButtonLoading(verifyBtn, true);
+
+      try {
+        const response = await fetch('/verify_otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email, otp: otp })
+        });
+
+        if (response.ok) {
+          isEmailVerified = true;
+          verifiedEmail = email;
+          document.getElementById('otpSection').classList.add('hidden');
+          emailInput.disabled = true;
+          emailInput.style.background = 'var(--bg-tertiary)';
+          toggleSignupButton();
+          showSuccess('Email verified successfully.');
+        } else {
+          const error = await response.json();
+          showError(error.error || 'Invalid OTP.');
+        }
+      } catch (error) {
+        showError('Network error. Please try again.');
+      } finally {
+        setButtonLoading(verifyBtn, false);
+      }
+    }
+
+    function toggleSignupButton() {
+      const termsChecked = document.getElementById('termsCheckbox').checked;
+      const signupBtn = document.getElementById('signupBtn');
+      signupBtn.disabled = !isEmailVerified || !termsChecked;
+      
+      if (signupBtn.disabled) {
+        signupBtn.classList.add('disabled');
+      } else {
+        signupBtn.classList.remove('disabled');
+      }
+    }
+
+    function setButtonLoading(button, loading) {
+      const textSpan = button.querySelector('.btn-text');
+      const loadingSpan = button.querySelector('.loading');
+      
+      if (loading) {
+        button.disabled = true;
+        button.classList.add('disabled');
+        if (textSpan) textSpan.classList.add('hidden');
+        if (loadingSpan) loadingSpan.classList.remove('hidden');
+      } else {
+        button.disabled = false;
+        button.classList.remove('disabled');
+        if (textSpan) textSpan.classList.remove('hidden');
+        if (loadingSpan) loadingSpan.classList.add('hidden');
+      }
+    }
+
+    function showError(message) {
+      const errorPopup = document.getElementById('flashPopup');
+      if (errorPopup) {
+        errorPopup.classList.add('error');
+        errorPopup.classList.remove('success');
+        errorPopup.style.display = 'block';
+        errorPopup.textContent = message;
+        setTimeout(() => {
+          errorPopup.style.display = 'none';
+        }, 5000);
+      } else {
+        alert(message);
+      }
+    }
+
+    function showSuccess(message) {
+      const successPopup = document.getElementById('flashPopup');
+      if (successPopup) {
+        successPopup.classList.add('success');
+        successPopup.classList.remove('error');
+        successPopup.style.display = 'block';
+        successPopup.textContent = message;
+        setTimeout(() => {
+          successPopup.style.display = 'none';
+        }, 5000);
+      } else {
+        alert(message);
+      }
+    }
+  // Toggle profile dropdown
+document.querySelector('.profile-icon').addEventListener('click', function (e) {
+  e.stopPropagation(); // Prevent closing when clicking inside
+  const dropdown = document.querySelector('.profile-dropdown');
+  dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+});
+
+// Close on outside click
+document.addEventListener('click', function (e) {
+  const profileMenu = document.querySelector('.profile-menu');
+  if (!profileMenu.contains(e.target)) {
+    document.querySelector('.profile-dropdown').style.display = 'none';
+  }
+});
+
+  </script>
+</body>
+</html>

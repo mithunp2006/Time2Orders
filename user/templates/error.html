@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Time2Order - Uh-oh!</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #6dd5ed, #2193b0);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      text-align: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      animation: bounce 1s infinite alternate;
+    }
+
+    p {
+      font-size: 1.25rem;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 1rem 2rem;
+      border-radius: 12px;
+      max-width: 600px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(5px);
+    }
+
+    a {
+      margin-top: 2rem;
+      display: inline-block;
+      padding: 0.75rem 2rem;
+      font-size: 1.1rem;
+      background: #feca57;
+      color: #1e272e;
+      border-radius: 50px;
+      text-decoration: none;
+      transition: 0.3s ease;
+      font-weight: 600;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    a:hover {
+      transform: scale(1.1);
+      background: #ff9f43;
+    }
+
+    .emoji {
+      font-size: 2rem;
+      margin-top: 10px;
+      animation: spin 2s linear infinite;
+    }
+
+    @keyframes bounce {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-15px); }
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .confetti {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: #feca57;
+      border-radius: 50%;
+      animation: fall 3s linear infinite;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(-100vh) rotate(0); }
+      100% { transform: translateY(100vh) rotate(720deg); }
+    }
+  </style>
+</head>
+<body>
+  <h1>Oops! Something went wrong <span class="emoji">🎈</span></h1>
+  <p>Looks like we hit a snag. But don’t worry — our team is on it! You can head back and continue shopping stress-free.</p>
+  <a href="{{ url_for('home') }}">Back to Home</a>
+
+  <script>
+    // Confetti animation
+    function createConfetti() {
+      const confetti = document.createElement('div');
+      confetti.className = 'confetti';
+      confetti.style.left = Math.random() * 100 + 'vw';
+      confetti.style.background = ['#feca57', '#ff6b81', '#1dd1a1', '#48dbfb'][Math.floor(Math.random() * 4)];
+      confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+      document.body.appendChild(confetti);
+      setTimeout(() => confetti.remove(), 3000);
+    }
+
+    setInterval(createConfetti, 150);
+  </script>
+</body>
+</html>

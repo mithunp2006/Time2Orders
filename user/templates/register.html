@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register | Time2Order</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="logo">
+      <a href="/">Time<span style="color:#3b82f6">2</span>Order</a>
+    </div>
+  </nav>
+
+  <section class="register-section">
+    <h2>Create Account</h2>
+    
+    {% if error %}
+      <div class="error-message" style="color: red;">
+        {{ error }}
+      </div>
+    {% endif %}
+
+    <!-- Registration Form -->
+    <form method="POST" action="{{ url_for('register') }}" class="register-form">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" name="username" id="username" placeholder="Enter your username" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" placeholder="Enter your password" required>
+      </div>
+      <div class="form-group">
+        <label for="confirm_password">Confirm Password</label>
+        <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm your password" required>
+      </div>
+      <div class="form-group">
+        <label for="phone_number">Phone Number</label>
+        <input type="text" name="phone_number" id="phone_number" placeholder="Enter your phone number" required>
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email" placeholder="Enter your email" required>
+      </div>
+      <div class="form-group">
+        <label for="address">Address</label>
+        <input type="text" name="address" id="address" placeholder="Enter your address" required>
+      </div>
+      <div class="form-group">
+        <label for="pincode">Pincode</label>
+        <input type="text" name="pincode" id="pincode" placeholder="Enter your pincode" required>
+      </div>
+      <div class="form-group">
+        <label for="name">Full Name</label>
+        <input type="text" name="name" id="name" placeholder="Enter your full name" required>
+      </div>
+      <div class="form-group">
+        <label for="alt_phone_number">Alternate Phone Number</label>
+        <input type="text" name="alt_phone_number" id="alt_phone_number" placeholder="Enter alternate phone number" required>
+      </div>
+      <button type="submit" class="btn-register">Register</button>
+    </form>
+
+    <p>Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
+  </section>
+<!-- Footer -->
+<footer style="background: var(--bg-dark); color: var(--text-white); padding: 3rem 2rem 2rem; margin-top: 4rem;">
+  <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2rem;">
+    <div style="flex: 1; min-width: 250px;">
+      <h3 style="font-family: 'Poppins', sans-serif; font-size: 1.5rem; font-weight: 700; color: #4facfe;">Time2Order</h3>
+      <p style="margin-top: 1rem; line-height: 1.7; color: var(--text-light);">
+        Your smart gateway to local shopping. Pre-order essentials and support your nearby vendors.
+      </p>
+    </div>
+
+    <div style="flex: 1; min-width: 200px;">
+      <h4 style="font-weight: 600; margin-bottom: 1rem;">Quick Links</h4>
+      <ul style="list-style: none; padding: 0; line-height: 2;">
+        <li><a href="/about" style="color: #cbd5e0; text-decoration: none;">About Us</a></li>
+        <li><a href="/terms" style="color: #cbd5e0; text-decoration: none;">Terms & Conditions</a></li>
+        <li><a href="/privacy" style="color: #cbd5e0; text-decoration: none;">Privacy Policy</a></li>
+        <li><a href="/contact" style="color: #cbd5e0; text-decoration: none;">Contact</a></li>
+      </ul>
+    </div>
+
+    <div style="flex: 1; min-width: 200px;">
+      <h4 style="font-weight: 600; margin-bottom: 1rem;">Connect With Us</h4>
+      <div style="display: flex; gap: 1rem; font-size: 1.25rem;">
+        <a href="#" style="color: #38bdf8;"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" style="color: #60a5fa;"><i class="fab fa-twitter"></i></a>
+        <a href="#" style="color: #f87171;"><i class="fab fa-instagram"></i></a>
+        <a href="#" style="color: #34d399;"><i class="fab fa-whatsapp"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <hr style="margin: 2rem 0; border-color: rgba(255,255,255,0.1);" />
+
+  <p style="text-align: center; color: #a0aec0; font-size: 0.9rem;">
+    &copy; {{ current_year or 2025 }} Time2Order. All rights reserved.
+  </p>
+</footer>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9fafb;
+      padding: 20px;
+    }
+    .navbar {
+      background-color: #fff;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo a {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #111827;
+    }
+    .register-section {
+      background-color: #fff;
+      padding: 2rem;
+      margin-top: 50px;
+      border-radius: 8px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      width: 400px;
+      margin: 0 auto;
+    }
+    .register-section h2 {
+      text-align: center;
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      color: #374151;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    .btn-register {
+      background-color: #3b82f6;
+      color: white;
+      padding: 0.8rem 1rem;
+      border-radius: 6px;
+      font-weight: 600;
+      width: 100%;
+      cursor: pointer;
+      border: none;
+      transition: background-color 0.3s ease;
+    }
+    .btn-register:hover {
+      background-color: #2563eb;
+    }
+    p {
+      text-align: center;
+      font-size: 14px;
+    }
+  </style>
+</body>
+</html>

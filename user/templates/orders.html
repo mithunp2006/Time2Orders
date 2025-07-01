@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order History | Time2Order</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --success-gradient: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            --warning-gradient: linear-gradient(135deg, #fc466b 0%, #3f5efb 100%);
+            --pending-gradient: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            
+            --primary-color: #667eea;
+            --primary-dark: #5a67d8;
+            --secondary-color: #f093fb;
+            --accent-color: #4facfe;
+            --success-color: #38ef7d;
+            --warning-color: #fc466b;
+            --pending-color: #fcb69f;
+            
+            --text-primary: #1a202c;
+            --text-secondary: #4a5568;
+            --text-light: #718096;
+            --text-white: #ffffff;
+            
+            --bg-primary: #ffffff;
+            --bg-secondary: #f7fafc;
+            --bg-tertiary: #edf2f7;
+            --bg-dark: #1a202c;
+            --bg-glass: rgba(255, 255, 255, 0.1);
+            
+            --border-color: #e2e8f0;
+            --border-light: #f1f5f9;
+            
+            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            --shadow-glow: 0 0 20px rgba(102, 126, 234, 0.4);
+            
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-2xl: 1.5rem;
+            --radius-3xl: 2rem;
+            
+            --transition-fast: 0.15s ease;
+            --transition-normal: 0.3s ease;
+            --transition-slow: 0.5s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--primary-gradient);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: var(--primary-gradient);
+        }
+
+        .animated-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            animation: float 15s ease-in-out infinite;
+        }
+
+        .shape:nth-child(1) {
+            width: 100px;
+            height: 100px;
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            width: 150px;
+            height: 150px;
+            top: 60%;
+            right: 15%;
+            animation-delay: 3s;
+        }
+
+        .shape:nth-child(3) {
+            width: 80px;
+            height: 80px;
+            top: 80%;
+            left: 30%;
+            animation-delay: 6s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-20px) rotate(120deg); }
+            66% { transform: translateY(20px) rotate(240deg); }
+        }
+
+        /* Header Section */
+        .header-section {
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            color: var(--text-white);
+            text-decoration: none;
+            border-radius: var(--radius-2xl);
+            font-weight: 600;
+            transition: var(--transition-normal);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 2rem;
+            animation: slideInLeft 0.8s ease;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInDown 1s ease 0.2s both;
+        }
+
+        .page-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            color: var(--text-white);
+            border-radius: var(--radius-2xl);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.875rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .page-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            color: var(--text-white);
+            margin-bottom: 1rem;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            line-height: 1.2;
+        }
+
+        .page-subtitle {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Main Content */
+        .main-content {
+            background: var(--bg-primary);
+            border-radius: var(--radius-3xl) var(--radius-3xl) 0 0;
+            margin-top: -2rem;
+            position: relative;
+            z-index: 10;
+            min-height: 70vh;
+            padding: 4rem 2rem 2rem;
+        }
+
+        /* Filter and Sort Section */
+        .controls-section {
+            max-width: 1400px;
+            margin: 0 auto 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+
+        .orders-stats {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-xl);
+            font-weight: 600;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-light);
+        }
+
+        .stat-number {
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        .filter-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .filter-select {
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition-normal);
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        /* Orders Grid */
+        .orders-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 2rem;
+            animation: fadeInUp 1s ease 0.6s both;
+        }
+
+        .order-card {
+            background: var(--bg-primary);
+            border-radius: var(--radius-2xl);
+            box-shadow: var(--shadow-lg);
+            transition: var(--transition-normal);
+            border: 1px solid var(--border-light);
+            position: relative;
+            overflow: hidden;
+            animation: slideInUp 0.6s ease both;
+        }
+
+        .order-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--primary-gradient);
+            transition: var(--transition-normal);
+        }
+
+        .order-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-2xl);
+        }
+
+        .order-card:hover::before {
+            height: 6px;
+            background: var(--accent-gradient);
+        }
+
+        .order-header {
+            padding: 2rem 2rem 1rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .order-id-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .order-id {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .order-id i {
+            color: var(--primary-color);
+            font-size: 1.25rem;
+        }
+
+        .order-status {
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-xl);
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-pending {
+            background: var(--pending-gradient);
+            color: var(--text-white);
+        }
+
+        .status-confirmed {
+            background: var(--success-gradient);
+            color: var(--text-white);
+        }
+
+        .status-ready {
+            background: var(--accent-gradient);
+            color: var(--text-white);
+        }
+
+        .status-completed {
+            background: var(--primary-gradient);
+            color: var(--text-white);
+        }
+
+        .status-cancelled {
+            background: var(--warning-gradient);
+            color: var(--text-white);
+        }
+
+        .shop-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            margin-bottom: 1rem;
+        }
+
+        .shop-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-white);
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .shop-details h4 {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .shop-details p {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .order-body {
+            padding: 0 2rem 2rem;
+        }
+
+        .order-details {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            transition: var(--transition-normal);
+        }
+
+        .detail-item:hover {
+            background: var(--bg-tertiary);
+            transform: translateX(5px);
+        }
+
+        .detail-label {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .detail-label i {
+            width: 20px;
+            color: var(--primary-color);
+        }
+
+        .detail-value {
+            color: var(--text-primary);
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .order-actions {
+            padding: 1.5rem 2rem;
+            border-top: 1px solid var(--border-light);
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--radius-lg);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-normal);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: var(--text-white);
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* No Orders State */
+        .no-orders {
+            text-align: center;
+            padding: 4rem 2rem;
+            max-width: 600px;
+            margin: 0 auto;
+            animation: fadeInUp 1s ease 0.8s both;
+        }
+
+        .no-orders-icon {
+            font-size: 4rem;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            opacity: 0.5;
+        }
+
+        .no-orders h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .no-orders p {
+            color: var(--text-secondary);
+            font-size: 1.125rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .cta-button {
+            padding: 1rem 2rem;
+            background: var(--primary-gradient);
+            color: var(--text-white);
+            text-decoration: none;
+            border-radius: var(--radius-xl);
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: var(--transition-normal);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-2xl);
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .orders-container {
+                grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+                gap: 1.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-section {
+                padding: 1.5rem;
+            }
+
+            .main-content {
+                padding: 3rem 1.5rem 2rem;
+            }
+
+            .controls-section {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 1.5rem;
+            }
+
+            .orders-stats {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .filter-controls {
+                justify-content: center;
+            }
+
+            .orders-container {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .order-header,
+            .order-body,
+            .order-actions {
+                padding-left: 1.5rem;
+                padding-right: 1.5rem;
+            }
+
+            .order-actions {
+                flex-direction: column;
+            }
+
+            .page-title {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-section {
+                padding: 1rem;
+            }
+
+            .main-content {
+                padding: 2rem 1rem 1rem;
+            }
+
+            .order-header,
+            .order-body,
+            .order-actions {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+
+            .order-id-section {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .detail-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .detail-value {
+                text-align: left;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .page-subtitle {
+                font-size: 1rem;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(102, 126, 234, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Utility Classes */
+        .hidden {
+            display: none !important;
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.6s ease both;
+        }
+    </style>
+</head>
+<body>
+    <div class="animated-bg"></div>
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <div class="header-section">
+        <a href="{{ url_for('home') }}" class="back-button">
+            <i class="fas fa-arrow-left"></i>
+            <span>Back to Home</span>
+        </a>
+        
+        <div class="page-header">
+            <div class="page-badge">
+                <i class="fas fa-history"></i>
+                <span>Order Management</span>
+            </div>
+            <h1 class="page-title">Your Order History</h1>
+            <p class="page-subtitle">Track and manage all your orders from your favorite local shops</p>
+        </div>
+    </div>
+
+    <div class="main-content">
+        {% if orders %}
+            <div class="controls-section">
+                <div class="orders-stats">
+                    <div class="stat-item">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span>Total Orders: <span class="stat-number" id="totalOrders">{{ orders|length }}</span></span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-clock"></i>
+                        <span>Recent: <span class="stat-number" id="recentOrders">0</span></span>
+                    </div>
+                </div>
+                
+                <div class="filter-controls">
+                    <select class="filter-select" id="statusFilter">
+                        <option value="all">All Status</option>
+                        <option value="pending">Pending</option>
+                        <option value="confirmed">Confirmed</option>
+                        <option value="ready">Ready</option>
+                        <option value="completed">Completed</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                    <select class="filter-select" id="sortOrder">
+                        <option value="newest">Newest First</option>
+                        <option value="oldest">Oldest First</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="orders-container" id="ordersContainer">
+                {% for order in orders %}
+                <div class="order-card fade-in" 
+                     data-order-date="{{ order.order_date.strftime('%Y-%m-%dT%H:%M:%S') }}"
+                     data-status="{{ order.status.lower() if order.status else 'pending' }}"
+                     style="animation-delay: {{ loop.index0 * 0.1 }}s">
+                    
+                    <div class="order-header">
+                        <div class="order-id-section">
+                            <div class="order-id">
+                                <i class="fas fa-receipt"></i>
+                                <span>Order #{{ order.order_id }}</span>
+                            </div>
+                            <div class="order-status status-{{ order.status.lower() if order.status else 'pending' }}">
+                                <i class="fas fa-circle"></i>
+                                <span>{{ order.status or 'Pending' }}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="shop-info">
+                            <div class="shop-avatar">
+                                {{ order.shop_name[0].upper() if order.shop_name else 'S' }}
+                            </div>
+                            <div class="shop-details">
+                                <h4>{{ order.shop_name or 'Unknown Shop' }}</h4>
+                                <p>Local Shop</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="order-body">
+                        <div class="order-details">
+                            <div class="detail-item">
+                                <div class="detail-label">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    <span>Order Date</span>
+                                </div>
+                                <div class="detail-value">
+                                    {{ order.order_date.strftime('%B %d, %Y') if order.order_date else 'N/A' }}
+                                </div>
+                            </div>
+                            
+                            <div class="detail-item">
+                                <div class="detail-label">
+                                    <i class="fas fa-clock"></i>
+                                    <span>Order Time</span>
+                                </div>
+                                <div class="detail-value">
+                                    {{ order.order_date.strftime('%I:%M %p') if order.order_date else 'N/A' }}
+                                </div>
+                            </div>
+                            
+                            {% if order.picking_time %}
+                            <div class="detail-item">
+                                <div class="detail-label">
+                                    <i class="fas fa-hand-paper"></i>
+                                    <span>Pickup Time</span>
+                                </div>
+                                <div class="detail-value">
+                                    {{ order.picking_time.strftime('%B %d, %Y at %I:%M %p') }}
+                                </div>
+                            </div>
+                            {% endif %}
+                            
+                            <div class="detail-item">
+                                <div class="detail-label">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span>Status</span>
+                                </div>
+                                <div class="detail-value">
+                                    {{ order.status or 'Processing' }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="order-actions">
+                        <a href="#" class="btn btn-secondary" onclick="viewOrderDetails({{ order.order_id }})">
+                            <i class="fas fa-eye"></i>
+                            <span>View Details</span>
+                        </a>
+                        {% if order.status and order.status.lower() in ['pending', 'confirmed'] %}
+                        <a href="#" class="btn btn-primary" onclick="trackOrder({{ order.order_id }})">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Track Order</span>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-orders">
+                <div class="no-orders-icon">
+                    <i class="fas fa-shopping-bag"></i>
+                </div>
+                <h3>No Orders Yet</h3>
+                <p>You haven't placed any orders yet. Start exploring local shops and place your first order!</p>
+                <a href="{{ url_for('home') }}" class="cta-button">
+                    <i class="fas fa-store"></i>
+                    <span>Explore Shops</span>
+                </a>
+            </div>
+        {% endif %}
+    </div>
+<!-- Footer -->
+<footer style="background: var(--bg-dark); color: var(--text-white); padding: 3rem 2rem 2rem; margin-top: 4rem;">
+  <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2rem;">
+    <div style="flex: 1; min-width: 250px;">
+      <h3 style="font-family: 'Poppins', sans-serif; font-size: 1.5rem; font-weight: 700; color: #4facfe;">Time2Order</h3>
+      <p style="margin-top: 1rem; line-height: 1.7; color: var(--text-light);">
+        Your smart gateway to local shopping. Pre-order essentials and support your nearby vendors.
+      </p>
+    </div>
+
+    <div style="flex: 1; min-width: 200px;">
+      <h4 style="font-weight: 600; margin-bottom: 1rem;">Quick Links</h4>
+      <ul style="list-style: none; padding: 0; line-height: 2;">
+        <li><a href="/about" style="color: #cbd5e0; text-decoration: none;">About Us</a></li>
+        <li><a href="/terms" style="color: #cbd5e0; text-decoration: none;">Terms & Conditions</a></li>
+        <li><a href="/privacy" style="color: #cbd5e0; text-decoration: none;">Privacy Policy</a></li>
+        <li><a href="/contact" style="color: #cbd5e0; text-decoration: none;">Contact</a></li>
+      </ul>
+    </div>
+
+    <div style="flex: 1; min-width: 200px;">
+      <h4 style="font-weight: 600; margin-bottom: 1rem;">Connect With Us</h4>
+      <div style="display: flex; gap: 1rem; font-size: 1.25rem;">
+        <a href="#" style="color: #38bdf8;"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" style="color: #60a5fa;"><i class="fab fa-twitter"></i></a>
+        <a href="#" style="color: #f87171;"><i class="fab fa-instagram"></i></a>
+        <a href="#" style="color: #34d399;"><i class="fab fa-whatsapp"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <hr style="margin: 2rem 0; border-color: rgba(255,255,255,0.1);" />
+
+  <p style="text-align: center; color: #a0aec0; font-size: 0.9rem;">
+    &copy; {{ current_year or 2025 }} Time2Order. All rights reserved.
+  </p>
+</footer>
+
+    <script>
+        $(document).ready(function() {
+            // Initialize page
+            initializeOrders();
+            setupFilters();
+            updateStats();
+            
+            // Add staggered animation to cards
+            $('.order-card').each(function(index) {
+                $(this).css('animation-delay', (index * 0.1) + 's');
+            });
+        });
+
+        function initializeOrders() {
+            // Sort orders by date (newest first by default)
+            sortOrders('newest');
+        }
+
+        function setupFilters() {
+            $('#statusFilter').on('change', function() {
+                filterOrdersByStatus($(this).val());
+            });
+
+            $('#sortOrder').on('change', function() {
+                sortOrders($(this).val());
+            });
+        }
+
+        function updateStats() {
+            const totalOrders = $('.order-card').length;
+            const recentOrders = $('.order-card').filter(function() {
+                const orderDate = new Date($(this).data('order-date'));
+                const weekAgo = new Date();
+                weekAgo.setDate(weekAgo.getDate() - 7);
+                return orderDate >= weekAgo;
+            }).length;
+
+            $('#totalOrders').text(totalOrders);
+            $('#recentOrders').text(recentOrders);
+        }
+
+        function sortOrders(order) {
+            const $container = $('#ordersContainer');
+            const $cards = $('.order-card').detach();
+
+            $cards.sort(function(a, b) {
+                const dateA = new Date($(a).data('order-date'));
+                const dateB = new Date($(b).data('order-date'));
+                
+                if (order === 'newest') {
+                    return dateB - dateA;
+                } else {
+                    return dateA - dateB;
+                }
+            });
+
+            // Re-append with staggered animation
+            $cards.each(function(index) {
+                $(this).css('animation-delay', (index * 0.05) + 's');
+                $(this).removeClass('fade-in').addClass('fade-in');
+            });
+
+            $container.append($cards);
+        }
+
+        function filterOrdersByStatus(status) {
+            $('.order-card').each(function() {
+                const cardStatus = $(this).data('status');
+                
+                if (status === 'all' || cardStatus === status) {
+                    $(this).show().addClass('fade-in');
+                } else {
+                    $(this).hide().removeClass('fade-in');
+                }
+            });
+
+            // Update visible count
+            const visibleCount = $('.order-card:visible').length;
+            $('#totalOrders').text(visibleCount);
+        }
+
+        function viewOrderDetails(orderId) {
+            // Implement order details view
+            console.log('Viewing details for order:', orderId);
+            // You can implement a modal or redirect to order details page
+            alert(`Viewing details for Order #${orderId}`);
+        }
+
+        function trackOrder(orderId) {
+            // Implement order tracking
+            console.log('Tracking order:', orderId);
+            // You can implement real-time tracking or redirect to tracking page
+            alert(`Tracking Order #${orderId}`);
+        }
+
+        // Add smooth scroll behavior
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add intersection observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all order cards
+        document.querySelectorAll('.order-card').forEach(card => {
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>
