@@ -3,5 +3,5 @@ Werkzeug==3.0.4
 Flask-Mail==0.10.0
 mysql-connector-python==9.0.0
 gunicorn==23.0.0
-dotenv==1.0.0
+dotenv==0.9.9
 requests==2.31.0
